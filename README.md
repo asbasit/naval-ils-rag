@@ -13,7 +13,7 @@ Built by Abdul Salam Basit, retired naval Commander (submarines) and electrical 
 | Part | State |
 |---|---|
 | Fetch, parse, chunk, hybrid index, reranker | Done; run on the real corpus |
-| Retrieval evaluation (32 questions, 4 setups compared) | Done; results below and in `eval/results/` |
+| Retrieval evaluation (41 questions, 4 setups compared, passage-level check) | Done; results below and in `eval/results/` |
 | MCP server | Done; tested over a real stdio client session |
 | Citing agent + citation verification | Built and tested against a scripted client; **live API run pending** |
 | End-to-end agent eval (`eval --agent`) | Built; **pending API run** |
@@ -118,6 +118,10 @@ Two question sets, each question tagged with the document(s) a correct answer mu
 - `eval/questions.jsonl`: 16 direct questions that use the documents' own vocabulary (4 of them need the two manually downloaded standards).
 - `eval/questions_hard.jsonl`: 12 paraphrased questions asked in a planner's words ("what happens to a sub that needs repairs while another boat is in the dock?"), 4 cross-document questions, and 4 questions the corpus **cannot** answer, such as the MTBF of the LM2500 or whether Chicoutimi is operational today, when the corpus holds a 2012 fact sheet. The unanswerable ones are skipped by retrieval scoring; the agent eval checks that it says the corpus doesn't cover them.
 
+- `eval/questions_ops.jsonl`: 9 operational planning questions (task intervals, configuration change, task-card resources, safety and tag-out, in-service optimisation, keeping the maintenance system in step with instruction changes, spares for older ships, grouping tasks, test-equipment calibration) plus 3 ship-specific questions no public corpus can answer ("which PMS tasks are overdue on HMCS Victoria this month?"). They were shortlisted from a 25-item list of maintenance-system acceptance tests: the 11 that test system behaviour (work-order closeout, audit trails, stock levels, deferral workflows) were dropped because no document covers them. These were written after reading the corpus, so they are not blind.
+
+Questions can also list `evidence` phrases. Then the eval checks the *passage*, not just the document: the right document can rank first while its top passage is the wrong one, and document-level scoring hides that.
+
 `python -m ilsrag eval --questions eval/questions_hard.jsonl` reports recall@k, MRR, per-type breakdowns and, for cross-document questions, whether *all* the needed documents came back. Results are saved under `eval/results/`. `--agent` adds an end-to-end run (API cost): does the answer cite an expected document, are all citations verified, does it decline on unanswerable questions.
 
 ### Results (Oct 2026)
@@ -139,6 +143,8 @@ First run, 11 DND/CAF + NATO documents, 521 passages:
 | 13 docs, 2,458 passages | 0.88 | 1.00 | 0.69 | 0.81 | 0.73 | 0.75 | 4/4 |
 
 The direct set now covers USN RCM and S4000P questions and gets all 16. The hard set lost a little: one Canadian-policy paraphrase (h02, "what four things are weighed equally when deciding how kit is supported") now loses to S4000P passages that discuss the same idea in general terms. That is the crowding effect again, from a large foreign standard this time. The agent's `issuers=["DND/CAF"]` filter exists for exactly this; whether it uses it is what `eval --agent` will show.
+
+**Operational set** (13 documents, default setup): document recall@1 1.00, passage evidence@1 0.78, evidence@5 0.89 (9 questions). The gap is the point: for "when should separate maintenance tasks be grouped?" MIL-STD-3034A ranks first, but its top passage is a general RCM decision question rather than the "related maintenance" rule that answers it.
 
 What this says:
 
@@ -202,7 +208,7 @@ ilsrag/agent.py        Claude tool loop, citation verification, extractive fallb
 ilsrag/mcp_server.py   the same tools as a read-only MCP server
 ilsrag/evaluate.py     retrieval and end-to-end metrics
 ilsrag/cli.py          command line
-eval/questions*.jsonl  direct and hard (paraphrase / cross-doc / unanswerable) question sets
+eval/questions*.jsonl  direct, hard (paraphrase / cross-doc / unanswerable) and operational question sets
 eval/results/          eval runs on the real corpus (11-doc and 13-doc)
 tests/                 fixture corpus + tests
 ```

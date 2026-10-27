@@ -135,7 +135,8 @@ def cmd_eval(args):
     for r in result["rows"]:
         mark = "✓" if r["hit@5"] else "✗"
         both = "" if len(r["expected"]) < 2 else ("  [all docs found]" if r["all_found"] else "  [missing a doc]")
-        print(f"{mark} {r['id']:5s} {r['type']:11s} rank={r['rank'] or '-':>2}  {r['question'][:64]}{both}")
+        evid = "" if not r.get("has_evidence") else f"  passage={r['evidence_rank'] or '-'}"
+        print(f"{mark} {r['id']:5s} {r['type']:11s} rank={r['rank'] or '-':>2}{evid}  {r['question'][:60]}{both}")
         if not r["hit@5"] or not r["all_found"]:
             print(f"        expected {r['expected']}, got {r['got']}")
     print(json.dumps(result["summary"], indent=2))

@@ -293,3 +293,16 @@ def test_embedding_cache_resumes(fixture_index, tmp_path):
     full = _embed_cached(CountingEmbedder(), texts, cache, batch=2, progress=None)
     assert CountingEmbedder.calls == len(texts)  # only the new ones were embedded
     assert np.allclose(full[:3], first)
+
+
+def test_evidence_rank(fixture_index):
+    """Passage-level scoring: right document is not enough, the passage must hold the answer."""
+    from ilsrag.evaluate import evaluate_retrieval
+    qs = [{"id": "e1", "question": "deep maintenance one at a time", "expected_docs": ["fx-policy"],
+           "evidence": ["no more than one Kestrel-class"]},
+          {"id": "e2", "question": "deep maintenance one at a time", "expected_docs": ["fx-policy"],
+           "evidence": ["phrase that appears nowhere"]}]
+    res = evaluate_retrieval(fixture_index, qs)
+    ranks = {r["id"]: r["evidence_rank"] for r in res["rows"]}
+    assert ranks["e1"] is not None and ranks["e2"] is None
+    assert res["summary"]["evidence@5"] == 0.5

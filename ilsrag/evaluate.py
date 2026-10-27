@@ -31,6 +31,10 @@ def _summ(rows: list[dict], ks) -> dict:
     multi = [r for r in rows if len(r["expected"]) > 1]
     if multi:
         out[f"all_docs@{max(ks)}"] = round(sum(r["all_found"] for r in multi) / len(multi), 3)
+    ev = [r for r in rows if r.get("has_evidence")]
+    if ev:
+        out["evidence@1"] = round(sum(r["evidence_rank"] == 1 for r in ev) / len(ev), 3)
+        out[f"evidence@{max(ks)}"] = round(sum(bool(r["evidence_rank"]) for r in ev) / len(ev), 3)
     out["n"] = len(rows)
     return out
 
@@ -46,6 +50,11 @@ def evaluate_retrieval(index: HybridIndex, questions: list[dict], ks=(1, 3, 5)) 
             skipped.append(q["id"])  # its source document hasn't been ingested
             continue
         hits = index.search(q["question"], k=max(ks))
+        # Passage-level check: the right document can rank first while its top
+        # passage is the wrong one. "evidence" lists phrases a passage that
+        # actually answers the question must contain.
+        evidence = [e.lower() for e in q.get("evidence", [])]
+        ev_rank = next((i + 1 for i, h in enumerate(hits) if any(e in h.chunk.text.lower() for e in evidence)), None) if evidence else None
         ranked_docs: list[str] = []
         for h in hits:
             if h.chunk.doc_id not in ranked_docs:
@@ -59,6 +68,8 @@ def evaluate_retrieval(index: HybridIndex, questions: list[dict], ks=(1, 3, 5)) 
             "got": ranked_docs[:max(ks)],
             "rank": None if first is None else first + 1,
             "all_found": all(d in ranked_docs[:max(ks)] for d in expected),
+            "has_evidence": bool(evidence),
+            "evidence_rank": ev_rank,
             **{f"hit@{k}": any(d in expected for d in ranked_docs[:k]) for k in ks},
         })
     by_type = defaultdict(list)

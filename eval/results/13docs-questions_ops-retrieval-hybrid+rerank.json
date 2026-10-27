@@ -1,0 +1,197 @@
+{
+  "summary": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "mrr": 1.0,
+    "all_docs@5": 0.667,
+    "evidence@1": 0.778,
+    "evidence@5": 0.889,
+    "n": 9,
+    "skipped_missing_docs": []
+  },
+  "rows": [
+    {
+      "id": "o01",
+      "type": "operational",
+      "question": "How should the interval for a preventive maintenance task be set: by calendar time, operating hours, or events?",
+      "expected": [
+        "mil-std-3034a",
+        "s4000p",
+        "dnd-pmi-spec"
+      ],
+      "got": [
+        "s4000p",
+        "mil-std-3034a"
+      ],
+      "rank": 1,
+      "all_found": false,
+      "has_evidence": true,
+      "evidence_rank": 1,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "o02",
+      "type": "operational",
+      "question": "When a combat-system component is replaced or upgraded, what does DND policy require for controlling and recording the change?",
+      "expected": [
+        "daod-3034-0"
+      ],
+      "got": [
+        "daod-3034-0",
+        "daod-3007-0",
+        "daod-3000-0"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "has_evidence": true,
+      "evidence_rank": 1,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "o03",
+      "type": "operational",
+      "question": "What must a maintenance task card specify about personnel, man-hours, tools, test equipment and consumables?",
+      "expected": [
+        "mil-std-3034a",
+        "dnd-pmi-spec"
+      ],
+      "got": [
+        "mil-std-3034a",
+        "dnd-pmi-spec",
+        "s4000p"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "has_evidence": true,
+      "evidence_rank": 1,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "o04",
+      "type": "operational",
+      "question": "What safety precautions, warnings and tag-out steps must maintenance procedures include before work starts?",
+      "expected": [
+        "mil-std-3034a",
+        "dnd-pmi-spec"
+      ],
+      "got": [
+        "mil-std-3034a",
+        "dnd-pmi-spec",
+        "s4000p"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "has_evidence": true,
+      "evidence_rank": 1,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "o05",
+      "type": "operational",
+      "question": "How should a preventive maintenance programme be adjusted using in-service findings and failure data?",
+      "expected": [
+        "s4000p"
+      ],
+      "got": [
+        "s4000p",
+        "mil-std-3034a",
+        "daod-3007-0"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "has_evidence": true,
+      "evidence_rank": 2,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "o06",
+      "type": "operational",
+      "question": "When a maintenance instruction changes for safety reasons, what has to happen to the maintenance management system that schedules the work?",
+      "expected": [
+        "dnd-pmi-spec"
+      ],
+      "got": [
+        "dnd-pmi-spec",
+        "mil-std-3034a",
+        "s4000p"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "has_evidence": true,
+      "evidence_rank": 1,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "o07",
+      "type": "operational",
+      "question": "What did the evaluations find about getting spare parts for older RCN ships?",
+      "expected": [
+        "eval-naval-forces-2013"
+      ],
+      "got": [
+        "eval-naval-forces-2013",
+        "eval-ready-naval-forces-2019",
+        "eval-maritime-equipment-program"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "has_evidence": true,
+      "evidence_rank": 1,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "o08",
+      "type": "operational",
+      "question": "When should separate maintenance tasks be grouped and done together?",
+      "expected": [
+        "mil-std-3034a"
+      ],
+      "got": [
+        "mil-std-3034a",
+        "s4000p"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "has_evidence": true,
+      "evidence_rank": null,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "o09",
+      "type": "operational",
+      "question": "How is calibration of the test equipment used in planned maintenance supported?",
+      "expected": [
+        "mil-std-3034a"
+      ],
+      "got": [
+        "mil-std-3034a",
+        "s4000p",
+        "eval-maritime-equipment-program"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "has_evidence": true,
+      "evidence_rank": 1,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    }
+  ]
+}
