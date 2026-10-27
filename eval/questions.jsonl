@@ -1,0 +1,16 @@
+{"id": "q01", "question": "What are the ILS elements DND recognises, and who holds functional authority for integrated logistics support?", "expected_docs": ["daod-3007-0"]}
+{"id": "q02", "question": "When is a sustainment business case analysis required and what should it inform?", "expected_docs": ["daod-3005-0"]}
+{"id": "q03", "question": "How is responsibility for maintenance of defence systems split between ADM(Mat) and the RCN commander?", "expected_docs": ["daod-3035-0"]}
+{"id": "q04", "question": "What does a Canadian Forces preventive maintenance instruction have to contain?", "expected_docs": ["dnd-pmi-spec"]}
+{"id": "q05", "question": "What factors reduced RCN readiness between 2013 and 2017 according to the Ready Naval Forces evaluation?", "expected_docs": ["eval-ready-naval-forces-2019"]}
+{"id": "q06", "question": "Who delivers maintenance under the Maritime Equipment Program: the Fleet Maintenance Facilities or contractors?", "expected_docs": ["eval-maritime-equipment-program"]}
+{"id": "q07", "question": "What is an EDWP on a Victoria-class submarine and how long should one keep the boat operational?", "expected_docs": ["rcn-sub-status-2012"]}
+{"id": "q08", "question": "Why can only one Victoria-class submarine be in deep maintenance at a time?", "expected_docs": ["rcn-sub-status-2012"]}
+{"id": "q09", "question": "What are the phases of the classic RCM process in MIL-STD-3034A, starting with system partitioning?", "expected_docs": ["mil-std-3034a"]}
+{"id": "q10", "question": "How does backfit RCM differ from classic RCM for USN ship maintenance requirements?", "expected_docs": ["mil-std-3034a"]}
+{"id": "q11", "question": "Which RCM standard governs maintenance requirement development for USN ships including submarines?", "expected_docs": ["mil-std-3034a"]}
+{"id": "q12", "question": "How does S4000P adjust preventive maintenance programmes once a system is in service?", "expected_docs": ["s4000p"]}
+{"id": "q13", "question": "How did NATO describe integrated logistics support and the role of ALP-10 in cooperative logistics?", "expected_docs": ["nato-logistics-handbook-ils"]}
+{"id": "q14", "question": "What configuration management responsibilities does DND assign for defence systems?", "expected_docs": ["daod-3034-0"]}
+{"id": "q15", "question": "What was the value and term of the Victoria In-Service Support Contract approved in 2008?", "expected_docs": ["rcn-sub-status-2012"]}
+{"id": "q16", "question": "What did the 2013 naval forces evaluation say about under-funding of equipment maintenance?", "expected_docs": ["eval-naval-forces-2013"]}

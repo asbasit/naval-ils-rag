@@ -1,0 +1,325 @@
+{
+  "summary": {
+    "recall@1": 0.688,
+    "recall@3": 0.812,
+    "recall@5": 0.812,
+    "mrr": 0.729,
+    "all_docs@5": 1.0,
+    "n": 16,
+    "skipped_missing_docs": [],
+    "by_type": {
+      "paraphrase": {
+        "recall@1": 0.583,
+        "recall@3": 0.75,
+        "recall@5": 0.75,
+        "mrr": 0.639,
+        "all_docs@5": 1.0,
+        "n": 12
+      },
+      "cross_doc": {
+        "recall@1": 1.0,
+        "recall@3": 1.0,
+        "recall@5": 1.0,
+        "mrr": 1.0,
+        "all_docs@5": 1.0,
+        "n": 4
+      }
+    }
+  },
+  "rows": [
+    {
+      "id": "h01",
+      "type": "paraphrase",
+      "question": "A frigate gets new hardware and software mid-life. Which rule says every change has to be tracked and documented, and which NATO agreement does Canada follow for that?",
+      "expected": [
+        "daod-3034-0"
+      ],
+      "got": [
+        "eval-naval-forces-2013",
+        "eval-ready-naval-forces-2019",
+        "daod-3034-0"
+      ],
+      "rank": 3,
+      "all_found": true,
+      "hit@1": false,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "h02",
+      "type": "paraphrase",
+      "question": "When deciding how a piece of kit will be supported for the rest of its life, what four things is the department supposed to weigh equally?",
+      "expected": [
+        "daod-3005-0"
+      ],
+      "got": [
+        "s4000p",
+        "eval-maritime-equipment-program",
+        "daod-3007-0"
+      ],
+      "rank": null,
+      "all_found": false,
+      "hit@1": false,
+      "hit@3": false,
+      "hit@5": false
+    },
+    {
+      "id": "h03",
+      "type": "paraphrase",
+      "question": "What happens to a submarine that needs major repairs while another boat of the class is already in the dock?",
+      "expected": [
+        "rcn-sub-status-2012"
+      ],
+      "got": [
+        "rcn-sub-status-2012",
+        "eval-naval-forces-2013",
+        "eval-ready-naval-forces-2019"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "h04",
+      "type": "paraphrase",
+      "question": "If a major piece of naval equipment fails badly, who is supposed to investigate it technically?",
+      "expected": [
+        "daod-3035-0"
+      ],
+      "got": [
+        "eval-ready-naval-forces-2019",
+        "eval-maritime-equipment-program",
+        "mil-std-3034a"
+      ],
+      "rank": null,
+      "all_found": false,
+      "hit@1": false,
+      "hit@3": false,
+      "hit@5": false
+    },
+    {
+      "id": "h05",
+      "type": "paraphrase",
+      "question": "In a written servicing schedule for a piece of equipment, how should the interval for each task be expressed?",
+      "expected": [
+        "dnd-pmi-spec"
+      ],
+      "got": [
+        "s4000p",
+        "mil-std-3034a",
+        "dnd-pmi-spec"
+      ],
+      "rank": 3,
+      "all_found": true,
+      "hit@1": false,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "h06",
+      "type": "paraphrase",
+      "question": "Which federal departments outside Defence take part in designing how military equipment will be supported?",
+      "expected": [
+        "daod-3005-0"
+      ],
+      "got": [
+        "eval-ready-naval-forces-2019",
+        "eval-maritime-equipment-program",
+        "daod-3007-0",
+        "eval-naval-forces-2013"
+      ],
+      "rank": null,
+      "all_found": false,
+      "hit@1": false,
+      "hit@3": false,
+      "hit@5": false
+    },
+    {
+      "id": "h07",
+      "type": "paraphrase",
+      "question": "Why were the older warships getting harder and more expensive to keep running?",
+      "expected": [
+        "eval-naval-forces-2013"
+      ],
+      "got": [
+        "eval-naval-forces-2013",
+        "eval-ready-naval-forces-2019",
+        "eval-maritime-equipment-program"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "h08",
+      "type": "paraphrase",
+      "question": "Was the naval equipment program office staffed well enough to run day-to-day support and its own transformation at once?",
+      "expected": [
+        "eval-maritime-equipment-program"
+      ],
+      "got": [
+        "eval-maritime-equipment-program",
+        "eval-naval-forces-2013",
+        "eval-ready-naval-forces-2019"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "h09",
+      "type": "paraphrase",
+      "question": "What does policy require about fake or non-genuine parts getting into the supply chain?",
+      "expected": [
+        "daod-3035-0"
+      ],
+      "got": [
+        "daod-3035-0",
+        "eval-ready-naval-forces-2019",
+        "daod-3000-0",
+        "mil-std-3034a"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "h10",
+      "type": "paraphrase",
+      "question": "Whose job is it to make sure a ship's control and navigation computers can survive and recover from a cyber attack?",
+      "expected": [
+        "daod-3035-0"
+      ],
+      "got": [
+        "daod-3035-0",
+        "eval-naval-forces-2013",
+        "mil-std-3034a"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "h11",
+      "type": "paraphrase",
+      "question": "Where were the Victoria-class deep refits physically carried out?",
+      "expected": [
+        "rcn-sub-status-2012"
+      ],
+      "got": [
+        "rcn-sub-status-2012",
+        "eval-naval-forces-2013",
+        "eval-ready-naval-forces-2019"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "x01",
+      "type": "cross_doc",
+      "question": "An engineering change is made to a ship's combat system. Which DND policies cover controlling the change itself and assuring the changed system is still safe and fit for purpose?",
+      "expected": [
+        "daod-3034-0",
+        "daod-3035-0"
+      ],
+      "got": [
+        "daod-3034-0",
+        "daod-3007-0",
+        "daod-3035-0"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "x02",
+      "type": "cross_doc",
+      "question": "Compare what the 2013 naval forces evaluation and the Maritime Equipment Program evaluation each identified as capacity problems in naval maintenance.",
+      "expected": [
+        "eval-naval-forces-2013",
+        "eval-maritime-equipment-program"
+      ],
+      "got": [
+        "eval-naval-forces-2013",
+        "eval-ready-naval-forces-2019",
+        "eval-maritime-equipment-program"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "x03",
+      "type": "cross_doc",
+      "question": "How does Canadian ILS policy relate to NATO guidance on integrated logistics support?",
+      "expected": [
+        "daod-3007-0",
+        "nato-logistics-handbook-ils"
+      ],
+      "got": [
+        "nato-logistics-handbook-ils",
+        "daod-3007-0",
+        "eval-ready-naval-forces-2019"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "h12",
+      "type": "paraphrase",
+      "question": "How do you decide whether a check on a ship system should happen on a fixed calendar or only when the equipment shows signs of wear?",
+      "expected": [
+        "mil-std-3034a",
+        "s4000p"
+      ],
+      "got": [
+        "mil-std-3034a",
+        "s4000p",
+        "eval-maritime-equipment-program"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "x04",
+      "type": "cross_doc",
+      "question": "Compare how the USN RCM standard and the ASD S4000P specification approach deciding preventive maintenance tasks.",
+      "expected": [
+        "mil-std-3034a",
+        "s4000p"
+      ],
+      "got": [
+        "s4000p",
+        "mil-std-3034a"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    }
+  ]
+}

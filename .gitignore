@@ -1,0 +1,9 @@
+# Corpus documents, index and embedding cache: downloaded/built locally, never committed
+data/
+_to_delete/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+.env

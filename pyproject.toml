@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "naval-ils-rag"
+version = "0.1.0"
+description = "Retrieval + citing Claude agent over public naval maintenance / ILS documents"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Abdul Salam Basit"}]
+readme = "README.md"
+dependencies = ["anthropic>=0.60", "pypdf>=4.0", "cryptography>=3.1", "beautifulsoup4>=4.12", "numpy>=1.26", "fastembed>=0.4", "mcp>=1.2", "tomli>=2.0; python_version < '3.11'"]
+
+[project.optional-dependencies]
+dev = ["pytest", "reportlab"]
+
+[project.scripts]
+ilsrag = "ilsrag.cli:main"
+ilsrag-mcp = "ilsrag.mcp_server:main"
+
+[tool.setuptools]
+packages = ["ilsrag"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

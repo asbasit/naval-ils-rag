@@ -1,0 +1,8 @@
+anthropic>=0.60
+pypdf>=4.0
+cryptography>=3.1  # some DND PDFs are AES-encrypted (no password, but pypdf needs it)
+beautifulsoup4>=4.12
+numpy>=1.26
+fastembed>=0.4
+tomli>=2.0; python_version < "3.11"
+mcp>=1.2

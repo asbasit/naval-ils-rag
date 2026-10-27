@@ -1,0 +1,296 @@
+{
+  "summary": {
+    "recall@1": 0.875,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "mrr": 0.938,
+    "n": 16,
+    "skipped_missing_docs": []
+  },
+  "rows": [
+    {
+      "id": "q01",
+      "type": "direct",
+      "question": "What are the ILS elements DND recognises, and who holds functional authority for integrated logistics support?",
+      "expected": [
+        "daod-3007-0"
+      ],
+      "got": [
+        "daod-3007-0",
+        "nato-logistics-handbook-ils",
+        "daod-3035-0"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "q02",
+      "type": "direct",
+      "question": "When is a sustainment business case analysis required and what should it inform?",
+      "expected": [
+        "daod-3005-0"
+      ],
+      "got": [
+        "daod-3005-0",
+        "eval-maritime-equipment-program",
+        "daod-3007-0"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "q03",
+      "type": "direct",
+      "question": "How is responsibility for maintenance of defence systems split between ADM(Mat) and the RCN commander?",
+      "expected": [
+        "daod-3035-0"
+      ],
+      "got": [
+        "eval-maritime-equipment-program",
+        "daod-3035-0",
+        "eval-naval-forces-2013",
+        "eval-ready-naval-forces-2019"
+      ],
+      "rank": 2,
+      "all_found": true,
+      "hit@1": false,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "q04",
+      "type": "direct",
+      "question": "What does a Canadian Forces preventive maintenance instruction have to contain?",
+      "expected": [
+        "dnd-pmi-spec"
+      ],
+      "got": [
+        "dnd-pmi-spec",
+        "mil-std-3034a",
+        "eval-ready-naval-forces-2019"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "q05",
+      "type": "direct",
+      "question": "What factors reduced RCN readiness between 2013 and 2017 according to the Ready Naval Forces evaluation?",
+      "expected": [
+        "eval-ready-naval-forces-2019"
+      ],
+      "got": [
+        "eval-naval-forces-2013",
+        "eval-ready-naval-forces-2019",
+        "rcn-sub-status-2012"
+      ],
+      "rank": 2,
+      "all_found": true,
+      "hit@1": false,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "q06",
+      "type": "direct",
+      "question": "Who delivers maintenance under the Maritime Equipment Program: the Fleet Maintenance Facilities or contractors?",
+      "expected": [
+        "eval-maritime-equipment-program"
+      ],
+      "got": [
+        "eval-maritime-equipment-program",
+        "eval-naval-forces-2013",
+        "eval-ready-naval-forces-2019"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "q07",
+      "type": "direct",
+      "question": "What is an EDWP on a Victoria-class submarine and how long should one keep the boat operational?",
+      "expected": [
+        "rcn-sub-status-2012"
+      ],
+      "got": [
+        "rcn-sub-status-2012",
+        "eval-naval-forces-2013",
+        "eval-ready-naval-forces-2019"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "q08",
+      "type": "direct",
+      "question": "Why can only one Victoria-class submarine be in deep maintenance at a time?",
+      "expected": [
+        "rcn-sub-status-2012"
+      ],
+      "got": [
+        "rcn-sub-status-2012",
+        "eval-maritime-equipment-program",
+        "eval-naval-forces-2013",
+        "eval-ready-naval-forces-2019"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "q09",
+      "type": "direct",
+      "question": "What are the phases of the classic RCM process in MIL-STD-3034A, starting with system partitioning?",
+      "expected": [
+        "mil-std-3034a"
+      ],
+      "got": [
+        "mil-std-3034a"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "q10",
+      "type": "direct",
+      "question": "How does backfit RCM differ from classic RCM for USN ship maintenance requirements?",
+      "expected": [
+        "mil-std-3034a"
+      ],
+      "got": [
+        "mil-std-3034a"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "q11",
+      "type": "direct",
+      "question": "Which RCM standard governs maintenance requirement development for USN ships including submarines?",
+      "expected": [
+        "mil-std-3034a"
+      ],
+      "got": [
+        "mil-std-3034a"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "q12",
+      "type": "direct",
+      "question": "How does S4000P adjust preventive maintenance programmes once a system is in service?",
+      "expected": [
+        "s4000p"
+      ],
+      "got": [
+        "s4000p",
+        "mil-std-3034a",
+        "daod-3007-0"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "q13",
+      "type": "direct",
+      "question": "How did NATO describe integrated logistics support and the role of ALP-10 in cooperative logistics?",
+      "expected": [
+        "nato-logistics-handbook-ils"
+      ],
+      "got": [
+        "nato-logistics-handbook-ils",
+        "daod-3007-0",
+        "s4000p"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "q14",
+      "type": "direct",
+      "question": "What configuration management responsibilities does DND assign for defence systems?",
+      "expected": [
+        "daod-3034-0"
+      ],
+      "got": [
+        "daod-3034-0",
+        "daod-3007-0",
+        "daod-3035-0"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "q15",
+      "type": "direct",
+      "question": "What was the value and term of the Victoria In-Service Support Contract approved in 2008?",
+      "expected": [
+        "rcn-sub-status-2012"
+      ],
+      "got": [
+        "rcn-sub-status-2012",
+        "eval-ready-naval-forces-2019",
+        "eval-naval-forces-2013",
+        "eval-maritime-equipment-program"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    },
+    {
+      "id": "q16",
+      "type": "direct",
+      "question": "What did the 2013 naval forces evaluation say about under-funding of equipment maintenance?",
+      "expected": [
+        "eval-naval-forces-2013"
+      ],
+      "got": [
+        "eval-naval-forces-2013",
+        "eval-ready-naval-forces-2019"
+      ],
+      "rank": 1,
+      "all_found": true,
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true
+    }
+  ]
+}
