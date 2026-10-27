@@ -41,6 +41,8 @@
       ],
       "rank": 3,
       "all_found": true,
+      "has_evidence": false,
+      "evidence_rank": null,
       "hit@1": false,
       "hit@3": true,
       "hit@5": true
@@ -59,6 +61,8 @@
       ],
       "rank": null,
       "all_found": false,
+      "has_evidence": false,
+      "evidence_rank": null,
       "hit@1": false,
       "hit@3": false,
       "hit@5": false
@@ -77,6 +81,8 @@
       ],
       "rank": 1,
       "all_found": true,
+      "has_evidence": false,
+      "evidence_rank": null,
       "hit@1": true,
       "hit@3": true,
       "hit@5": true
@@ -95,6 +101,8 @@
       ],
       "rank": null,
       "all_found": false,
+      "has_evidence": false,
+      "evidence_rank": null,
       "hit@1": false,
       "hit@3": false,
       "hit@5": false
@@ -113,6 +121,8 @@
       ],
       "rank": 3,
       "all_found": true,
+      "has_evidence": false,
+      "evidence_rank": null,
       "hit@1": false,
       "hit@3": true,
       "hit@5": true
@@ -125,13 +135,14 @@
         "daod-3005-0"
       ],
       "got": [
-        "eval-ready-naval-forces-2019",
-        "eval-maritime-equipment-program",
         "daod-3007-0",
-        "eval-naval-forces-2013"
+        "eval-ready-naval-forces-2019",
+        "eval-maritime-equipment-program"
       ],
       "rank": null,
       "all_found": false,
+      "has_evidence": false,
+      "evidence_rank": null,
       "hit@1": false,
       "hit@3": false,
       "hit@5": false
@@ -150,6 +161,8 @@
       ],
       "rank": 1,
       "all_found": true,
+      "has_evidence": false,
+      "evidence_rank": null,
       "hit@1": true,
       "hit@3": true,
       "hit@5": true
@@ -168,6 +181,8 @@
       ],
       "rank": 1,
       "all_found": true,
+      "has_evidence": false,
+      "evidence_rank": null,
       "hit@1": true,
       "hit@3": true,
       "hit@5": true
@@ -187,6 +202,8 @@
       ],
       "rank": 1,
       "all_found": true,
+      "has_evidence": false,
+      "evidence_rank": null,
       "hit@1": true,
       "hit@3": true,
       "hit@5": true
@@ -205,6 +222,8 @@
       ],
       "rank": 1,
       "all_found": true,
+      "has_evidence": false,
+      "evidence_rank": null,
       "hit@1": true,
       "hit@3": true,
       "hit@5": true
@@ -223,6 +242,8 @@
       ],
       "rank": 1,
       "all_found": true,
+      "has_evidence": false,
+      "evidence_rank": null,
       "hit@1": true,
       "hit@3": true,
       "hit@5": true
@@ -242,6 +263,8 @@
       ],
       "rank": 1,
       "all_found": true,
+      "has_evidence": false,
+      "evidence_rank": null,
       "hit@1": true,
       "hit@3": true,
       "hit@5": true
@@ -261,6 +284,8 @@
       ],
       "rank": 1,
       "all_found": true,
+      "has_evidence": false,
+      "evidence_rank": null,
       "hit@1": true,
       "hit@3": true,
       "hit@5": true
@@ -280,6 +305,8 @@
       ],
       "rank": 1,
       "all_found": true,
+      "has_evidence": false,
+      "evidence_rank": null,
       "hit@1": true,
       "hit@3": true,
       "hit@5": true
@@ -299,6 +326,8 @@
       ],
       "rank": 1,
       "all_found": true,
+      "has_evidence": false,
+      "evidence_rank": null,
       "hit@1": true,
       "hit@3": true,
       "hit@5": true
@@ -317,6 +346,8 @@
       ],
       "rank": 1,
       "all_found": true,
+      "has_evidence": false,
+      "evidence_rank": null,
       "hit@1": true,
       "hit@3": true,
       "hit@5": true

@@ -1,0 +1,27 @@
+# FICTIONAL EXAMPLE. Not a real engineering change, equipment or ship.
+id = "EC-DEMO-001"
+title = "Replace obsolete power supply unit in the navigation radar transceiver"
+platform = "Arctic and Offshore Patrol Ship class (illustrative)"
+system = "Navigation radar, transceiver cabinet"
+description = """
+The transceiver power supply unit is no longer manufactured. The equipment
+supplier offers a replacement unit with the same mounting and connectors but a
+different part number. The new unit has a higher predicted MTBF and adds a
+built-in test indicator, which changes one periodic check from a voltage
+measurement to a visual BIT check. No software change. The supplier has not
+yet confirmed whether the new unit's capacitor bank needs special handling.
+"""
+
+[changes]
+part_number = true
+form_fit_function = false        # same mounting, connectors and function
+reliability = true               # higher predicted MTBF
+maintenance_tasks = true         # voltage check becomes a BIT check
+software = false
+tools_test_equipment = false     # the multimeter check is no longer needed, nothing new added
+operator_procedure = false
+ship_services = false
+hazardous_material = "unknown"   # supplier to confirm capacitor handling
+obsolescence = true
+safety = "unknown"
+skills = false

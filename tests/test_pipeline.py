@@ -228,7 +228,7 @@ def test_mcp_server_tools(fixture_index, tmp_path, monkeypatch):
     ms._toolbox.cache_clear()
 
     tools = {t.name for t in asyncio.run(ms.server.list_tools())}
-    assert tools == {"search_corpus", "read_passage", "list_documents"}
+    assert tools == {"search_corpus", "read_passage", "list_documents", "ec_impact"}
 
     out = ms.search_corpus("deep maintenance one at a time", k=3, issuers=["DND/CAF"])
     assert out["results"] and out["results"][0]["issuer"] == "DND/CAF"
@@ -306,3 +306,112 @@ def test_evidence_rank(fixture_index):
     ranks = {r["id"]: r["evidence_rank"] for r in res["rows"]}
     assert ranks["e1"] is not None and ranks["e2"] is None
     assert res["summary"]["evidence@5"] == 0.5
+
+
+def test_short_list_items_kept(tmp_path):
+    """DAOD 3007-0 lists the twelve ILS elements as short <li> items; all must survive."""
+    items = ["maintenance management;", "supply support;", "computer resources;", "technical data;",
+             "design influence;", "support equipment."]
+    html = "<html><body><main><h2>Context</h2><p>ILS consists of the following ILS elements:</p><ol>" + \
+           "".join(f"<li>{i}</li>" for i in items) + "</ol></main></body></html>"
+    p = tmp_path / "x.html"
+    p.write_text(html)
+    text = " ".join(b.text for b in parse_html(p))
+    for i in items:
+        assert i.rstrip(";.") in text
+
+
+# ------------------------------------------------------------- EC impact
+
+EC_RULES = """
+[vocabulary]
+part_number = "New part number"
+software = "Software change"
+safety = "Safety-related"
+
+[[rule]]
+id = "cm"
+product = "Configuration records"
+ils_element = "Configuration management"
+triggers = ["always"]
+action = "Update the baseline."
+basis = [{ doc = "fx-policy", evidence = "no more than one Kestrel-class" }]
+
+[[rule]]
+id = "spares"
+product = "Spares and provisioning"
+ils_element = "Supply support"
+triggers = ["part_number"]
+action = "Rerun sparing."
+basis = [{ doc = "fx-eval", evidence = "thirty percent of its trades staff" }]
+
+[[rule]]
+id = "sw"
+product = "Software support"
+ils_element = "Computer resources"
+triggers = ["software"]
+action = "Update software baseline."
+basis = [{ doc = "fx-usn", evidence = "a phrase that is not in the corpus" }]
+
+[[rule]]
+id = "safety"
+product = "Safety precautions"
+ils_element = "Technical data"
+triggers = ["safety"]
+action = "Review warnings."
+basis = []
+"""
+
+
+def _ec_setup(tmp_path, changes: str):
+    from ilsrag import ec_impact as ec
+    (tmp_path / "rules.toml").write_text(EC_RULES)
+    (tmp_path / "ec.toml").write_text('id = "EC-T"\ntitle = "Test change"\n[changes]\n' + changes)
+    vocab, rules = ec.load_rules(tmp_path / "rules.toml")
+    return ec, vocab, rules, ec.load_change(tmp_path / "ec.toml", vocab)
+
+
+def test_ec_impact_statuses_and_basis(fixture_index, tmp_path):
+    ec, vocab, rules, change = _ec_setup(tmp_path, 'part_number = true\nsoftware = false\n')
+    a = ec.assess(change, rules, vocab, fixture_index.chunks)
+    status = {f.rule.id: f.status for f in a.findings}
+    # "always" and a yes-trigger are affected; a no-trigger is not; an omitted
+    # characteristic is unknown, so its product goes to the confirm list.
+    assert status == {"cm": "affected", "spares": "affected", "sw": "not affected", "safety": "confirm"}
+    cm = next(f for f in a.findings if f.rule.id == "cm")
+    assert cm.citations[0].found and cm.citations[0].chunk.doc_id == "fx-policy"
+    spares = next(f for f in a.findings if f.rule.id == "spares")
+    assert spares.citations[0].chunk.page == 2  # cites the right page
+    md = ec.render_markdown(a)
+    assert "## Affected ILS products (2)" in md and "## Confirm with the EC team (1)" in md
+    assert "p.2" in md and "Basis not found" not in md  # sw is not affected, so its missing basis isn't reported
+    # safety was omitted, so it is an open question naming the product it bears on
+    assert a.open_questions() and a.open_questions()[0][0] == "safety"
+    assert "## Open questions for the EC team (1)" in md and "Safety precautions (confirm)" in md
+
+
+def test_ec_impact_missing_basis_and_validation(fixture_index, tmp_path):
+    ec, vocab, rules, change = _ec_setup(tmp_path, 'software = true\n')
+    a = ec.assess(change, rules, vocab, fixture_index.chunks)
+    assert [c.evidence for c in a.missing_basis] == ["a phrase that is not in the corpus"]
+    assert "## Basis not found" in ec.render_markdown(a)
+    problems = ec.check_rules(rules, fixture_index.chunks)
+    assert len(problems) == 1 and "sw" in problems[0]
+    (tmp_path / "bad.toml").write_text('id = "X"\ntitle = "Y"\n[changes]\nwarp_drive = true\n')
+    with pytest.raises(ValueError):
+        ec.load_change(tmp_path / "bad.toml", vocab)
+    (tmp_path / "bad2.toml").write_text('id = "X"\ntitle = "Y"\n[changes]\nsoftware = "maybe"\n')
+    with pytest.raises(ValueError):
+        ec.load_change(tmp_path / "bad2.toml", vocab)
+
+
+def test_shipped_ec_rules_and_examples_load():
+    """The real rules file and example ECs parse and use only known characteristics."""
+    from pathlib import Path
+    from ilsrag import ec_impact as ec
+    root = Path(__file__).resolve().parent.parent
+    vocab, rules = ec.load_rules(root / "corpus" / "ec_rules.toml")
+    assert len(rules) >= 15 and all(r.basis for r in rules)
+    for f in sorted((root / "examples" / "ec").glob("*.toml")):
+        change = ec.load_change(f, vocab)
+        assert change.id.startswith("EC-DEMO")

@@ -1,0 +1,24 @@
+# FICTIONAL EXAMPLE. Not a real engineering change, equipment or ship.
+id = "EC-DEMO-002"
+title = "Operator console software update adding a new track-display mode"
+platform = "Joint Support Ship class (illustrative)"
+system = "Combat management system, operator consoles"
+description = """
+A software release adds a track-display mode and changes two operator menus.
+Loading the release needs a new maintenance laptop image. Hardware is
+unchanged. Operators need familiarization on the new mode.
+"""
+
+[changes]
+part_number = false
+form_fit_function = false
+reliability = false
+maintenance_tasks = true          # new software loading procedure
+software = true
+tools_test_equipment = true       # new maintenance laptop image
+operator_procedure = true
+ship_services = false
+hazardous_material = false
+obsolescence = false
+safety = false
+skills = false

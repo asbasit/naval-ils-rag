@@ -83,6 +83,31 @@ def list_documents() -> dict:
     return _run("list_documents", {})
 
 
+@server.tool()
+def ec_impact(title: str, changes: dict[str, bool | str], description: str = "",
+              system: str = "", platform: str = "") -> dict:
+    """Engineering-change impact assessment: which ILS products a change affects,
+    the action for each, and the cited policy or standard passage behind it.
+
+    `changes` maps change characteristics to true, false or "unknown":
+    part_number, form_fit_function, reliability, maintenance_tasks, software,
+    tools_test_equipment, operator_procedure, ship_services, hazardous_material,
+    obsolescence, safety, skills. Omitted characteristics count as unknown and put
+    the products they would affect on a confirm-with-the-EC-team list.
+    """
+    from . import ec_impact as ec
+    vocab, rules = ec.load_rules(HOME / "corpus" / "ec_rules.toml")
+    bad = [k for k in changes if k not in vocab]
+    if bad:
+        return {"error": f"unknown change characteristics {bad}", "allowed": sorted(vocab)}
+    change = ec.ChangeRequest(id="EC-MCP", title=title, platform=platform, system=system,
+                              description=description,
+                              changes={k: changes.get(k, ec.UNKNOWN) for k in vocab})
+    chunks = ec.load_chunks(HOME / "data" / "index")
+    a = ec.assess(change, rules, vocab, chunks)
+    return {**ec.to_dict(a), "report_markdown": ec.render_markdown(a)}
+
+
 def main() -> None:
     server.run()  # stdio transport
 

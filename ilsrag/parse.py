@@ -168,7 +168,9 @@ def parse_html(path: Path) -> list[Block]:
             text = _normalise_line(el.get_text(" "))
         # Definition terms are short ("available (disponible)") but carry the meaning
         # of the <dd> that follows, so keep them.
-        if len(text) > 25 or (len(text) > 2 and _is_term(el)):
+        # List items and definition terms are content even when short
+        # ("supply support;", "technical data;" in DAOD 3007-0's list of ILS elements).
+        if len(text) > 25 or (len(text) > 2 and (el.name == "li" or _is_term(el))):
             prefix = "- " if el.name == "li" else ""
             blocks.append(Block(text=prefix + text, heading=heading, anchor=anchor))
     return blocks

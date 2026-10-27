@@ -1,0 +1,183 @@
+# Engineering-change (EC) impact rules.
+#
+# Each rule is one ILS product that may need updating when a system goes
+# through an engineering change. `triggers` lists the change characteristics
+# (see [vocabulary]) that make the product affected; "always" means every EC.
+# `basis` points at the passage in the corpus that justifies the rule: the
+# document id and a phrase that must appear in it. The tool finds that exact
+# passage and cites its page or section; if the phrase is not in the corpus,
+# the report says so instead of citing something nearby.
+#
+# Written for public, unclassified planning practice. Edit freely: the
+# triggers and actions are the part an experienced ILS practitioner should own.
+
+[vocabulary]
+part_number = "New or changed part number, supplier or source of supply"
+form_fit_function = "Change to physical form, mounting, interfaces, or how the item performs its function"
+reliability = "Expected change in failure rate, MTBF, failure modes or redundancy"
+maintenance_tasks = "Preventive or corrective maintenance tasks added, removed or changed"
+software = "Software or firmware change"
+tools_test_equipment = "New or changed tools, support and test equipment, or calibration needs"
+operator_procedure = "Change to how the crew operates the system"
+ship_services = "Change to power, cooling, space or weight demands on the ship"
+hazardous_material = "New or changed hazardous materials (batteries, chemicals, pressurized items)"
+obsolescence = "Change driven by obsolescence or diminishing manufacturing sources"
+safety = "Safety-related change or new hazards to personnel or equipment"
+skills = "New skills, qualifications or manning needs"
+
+[[rule]]
+id = "cm"
+product = "Configuration records: configuration items, baseline and status accounting"
+ils_element = "Configuration management (DAOD 3034-0)"
+triggers = ["always"]
+action = "Raise or update the configuration change record; update the configuration item list and as-maintained baseline; record status accounting for every affected hull."
+basis = [{ doc = "daod-3034-0", evidence = "configuration changes are methodically controlled and documented" }]
+
+[[rule]]
+id = "vv"
+product = "Support solution verification and validation"
+ils_element = "Product support management"
+triggers = ["always"]
+action = "Plan verification and validation of the updated support solution before the modified system returns to service."
+basis = [{ doc = "daod-3007-0", evidence = "modifying an in-service defence system" }]
+
+[[rule]]
+id = "assurance"
+product = "Materiel assurance: safety and fit-for-purpose assessment"
+ils_element = "Sustaining engineering"
+triggers = ["safety", "form_fit_function", "hazardous_material", "part_number"]
+action = "Document that the changed item remains safe, fit for purpose, available and serviceable; confirm the new part is genuine and conforming."
+basis = [
+  { doc = "daod-3035-0", evidence = "assesses and documents safety, fit for purpose" },
+  { doc = "daod-3035-0", evidence = "counterfeit and non-conforming materiel" },
+]
+
+[[rule]]
+id = "lsa"
+product = "Logistic support analysis records: FMECA, maintenance task analysis, LORA"
+ils_element = "Maintenance management"
+triggers = ["part_number", "reliability", "maintenance_tasks", "form_fit_function"]
+action = "Update the LSA records for the changed item: failure modes and criticality, maintenance task analysis, and level-of-repair decision."
+basis = [{ doc = "mil-std-3034a", evidence = "The specific purpose of the FMEA is to determine the dominant failure modes" }]
+
+[[rule]]
+id = "ram"
+product = "Reliability, availability and maintainability predictions and RBDs"
+ils_element = "Design influence"
+triggers = ["reliability", "part_number"]
+action = "Rerun the reliability prediction and reliability block diagram for the affected function; check availability targets still hold."
+basis = [{ doc = "daod-3007-0", evidence = "achieve desired availability, serviceability and reliability" }]
+
+[[rule]]
+id = "pm"
+product = "Maintenance plan, preventive maintenance schedule and instructions"
+ils_element = "Maintenance management"
+triggers = ["maintenance_tasks", "part_number", "reliability", "tools_test_equipment"]
+action = "Revise the maintenance plan and preventive maintenance schedule: tasks, intervals (hours, calendar or mission), references and remarks."
+basis = [
+  { doc = "dnd-pmi-spec", evidence = "frequency at which each function is to be performed" },
+  { doc = "mil-std-3034a", evidence = "periodicity" },
+]
+
+[[rule]]
+id = "erp"
+product = "Maintenance management system task data (ERP)"
+ils_element = "Maintenance management"
+triggers = ["maintenance_tasks", "safety"]
+action = "Update task data in the maintenance management system at the same time as the instruction is released, so scheduled work matches the published procedure."
+basis = [{ doc = "dnd-pmi-spec", evidence = "Technical Authority should ensure the ERP" }]
+
+[[rule]]
+id = "spares"
+product = "Spares and provisioning: sparing analysis, provisioning lists, codification"
+ils_element = "Supply support"
+triggers = ["part_number", "reliability", "obsolescence"]
+action = "Rerun the sparing analysis; update provisioning and initial spares lists; request codification of the new part; plan disposal or use of superseded stock."
+basis = [
+  { doc = "daod-3007-0", evidence = "supply support" },
+  { doc = "nato-logistics-handbook-ils", evidence = "NATO Codification System" },
+]
+
+[[rule]]
+id = "obsolescence"
+product = "Obsolescence management plan"
+ils_element = "Sustaining engineering"
+triggers = ["obsolescence", "part_number"]
+action = "Record the obsolescence case and resolution; check other items from the same source for similar risk."
+basis = [{ doc = "daod-3000-0", evidence = "obsolescence management and technological refresh" }]
+
+[[rule]]
+id = "techdata"
+product = "Technical data: maintenance and operator manuals, parts lists, instructions"
+ils_element = "Technical data"
+triggers = ["part_number", "form_fit_function", "maintenance_tasks", "operator_procedure", "software", "safety"]
+action = "Identify every publication that shows the changed item (manuals, illustrated parts lists, maintenance instructions) and raise amendments."
+basis = [
+  { doc = "daod-3007-0", evidence = "technical data" },
+  { doc = "dnd-pmi-spec", evidence = "Preventive Maintenance Instructions shall contain" },
+]
+
+[[rule]]
+id = "safety-docs"
+product = "Safety precautions, warnings and tag-out steps in procedures"
+ils_element = "Technical data"
+triggers = ["safety", "hazardous_material", "maintenance_tasks"]
+action = "Review warnings, cautions and isolation (tag-out) steps in each affected procedure."
+basis = [
+  { doc = "dnd-pmi-spec", evidence = "Any hazard or danger associated with" },
+  { doc = "mil-std-3034a", evidence = "tag-out" },
+]
+
+[[rule]]
+id = "training"
+product = "Training and training support material"
+ils_element = "Training and training support"
+triggers = ["operator_procedure", "skills", "software", "maintenance_tasks"]
+action = "Update operator and maintainer training packages and assess whether a training gap analysis is needed."
+basis = [{ doc = "daod-3007-0", evidence = "training and training support" }]
+
+[[rule]]
+id = "personnel"
+product = "Personnel: skills, qualifications and manning"
+ils_element = "Human resources and personnel"
+triggers = ["skills"]
+action = "Confirm the trades and qualifications the change assumes; flag any new qualification requirement."
+basis = [{ doc = "daod-3007-0", evidence = "human resources and personnel" }]
+
+[[rule]]
+id = "support-equipment"
+product = "Support and test equipment, tools and calibration"
+ils_element = "Support equipment"
+triggers = ["tools_test_equipment"]
+action = "List new or changed tools and test equipment; provision them; add calibration requirements."
+basis = [
+  { doc = "daod-3007-0", evidence = "support equipment" },
+  { doc = "mil-std-3034a", evidence = "calibration support" },
+]
+
+[[rule]]
+id = "software"
+product = "Computer resources: software support and cyber assurance"
+ils_element = "Computer resources"
+triggers = ["software"]
+action = "Update the software configuration baseline and loading procedures; confirm cyber materiel assurance for platform technology."
+basis = [
+  { doc = "daod-3007-0", evidence = "computer resources" },
+  { doc = "daod-3035-0", evidence = "cyber materiel assurance" },
+]
+
+[[rule]]
+id = "facilities"
+product = "Facilities and ship services: power, cooling, space and weight"
+ils_element = "Facilities and infrastructure"
+triggers = ["ship_services"]
+action = "Check ship services (power, cooling, space, weight) and shore facilities for the changed item."
+basis = [{ doc = "daod-3007-0", evidence = "facilities and infrastructure" }]
+
+[[rule]]
+id = "phst"
+product = "Packaging, handling, storage and transportation"
+ils_element = "Logistics-related operations"
+triggers = ["hazardous_material", "form_fit_function", "part_number"]
+action = "Update packaging, handling, storage and transport data for the new item, including any hazardous-goods requirements."
+basis = [{ doc = "daod-3007-0", evidence = "packaging, handling, storage and transportation" }]

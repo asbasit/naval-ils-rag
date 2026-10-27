@@ -160,6 +160,35 @@ def cmd_eval(args):
     print(f"Results saved in {out_dir}")
 
 
+def cmd_ec_impact(args):
+    from . import ec_impact as ec
+    _, _, index_dir = _paths(args)
+    if not (index_dir / "chunks.jsonl").exists():
+        sys.exit("No index found. Run `fetch` then `ingest` first.")
+    vocab, rules = ec.load_rules(Path(args.rules))
+    chunks = ec.load_chunks(index_dir)
+    if args.check_rules:
+        problems = ec.check_rules(rules, chunks)
+        n = sum(len(r.basis) for r in rules)
+        print(f"{n - len(problems)} of {n} cited passages found in the corpus")
+        for p in problems:
+            print("  " + p)
+        sys.exit(1 if problems else 0)
+    if not args.change:
+        sys.exit("Give a change file, e.g. examples/ec/ec-demo-001-radar-psu.toml, or use --check-rules")
+    change = ec.load_change(Path(args.change), vocab)
+    assessment = ec.assess(change, rules, vocab, chunks)
+    out = json.dumps(ec.to_dict(assessment), indent=2) if args.json else ec.render_markdown(assessment)
+    if args.out:
+        Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.out).write_text(out, encoding="utf-8")
+        a = assessment
+        print(f"{change.id}: {len(a.by_status('affected'))} affected, {len(a.by_status('confirm'))} to confirm, "
+              f"{len(a.by_status('not affected'))} not affected, {len(a.missing_basis)} basis not found -> {args.out}")
+    else:
+        print(out)
+
+
 def cmd_docs(args):
     manifest, raw, _ = _paths(args)
     for meta in load_manifest(manifest).values():
@@ -207,6 +236,14 @@ def main(argv=None):
     s.add_argument("--no-dense", action="store_true", help="keyword search only, no embeddings")
     s.add_argument("--no-rerank", action="store_true", help="skip the cross-encoder rerank (faster, less precise)")
     s.set_defaults(func=cmd_eval)
+
+    s = sub.add_parser("ec-impact", help="engineering-change impact assessment with cited basis")
+    s.add_argument("change", nargs="?", help="EC description file (TOML), see examples/ec/")
+    s.add_argument("--rules", default=str(ROOT / "corpus" / "ec_rules.toml"))
+    s.add_argument("--out", help="write the report here instead of printing it")
+    s.add_argument("--json", action="store_true", help="JSON instead of Markdown")
+    s.add_argument("--check-rules", action="store_true", help="verify every rule's cited passage exists in the corpus")
+    s.set_defaults(func=cmd_ec_impact)
 
     args = p.parse_args(argv)
     args.func(args)

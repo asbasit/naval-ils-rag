@@ -15,6 +15,7 @@ Built by Abdul Salam Basit, retired naval Commander (submarines) and electrical 
 | Fetch, parse, chunk, hybrid index, reranker | Done; run on the real corpus |
 | Retrieval evaluation (41 questions, 4 setups compared, passage-level check) | Done; results below and in `eval/results/` |
 | MCP server | Done; tested over a real stdio client session |
+| Engineering-change impact assessment (`ec-impact`) | Done; 17 rules, all 24 cited passages verified in the real corpus |
 | Citing agent + citation verification | Built and tested against a scripted client; **live API run pending** |
 | End-to-end agent eval (`eval --agent`) | Built; **pending API run** |
 
@@ -36,6 +37,27 @@ $ python -m ilsrag search "Why can only one Victoria-class submarine be in deep 
 ```
 
 Without the reranker the general fleet-status paragraph comes first; with it, the passage that actually gives the reason does.
+
+## Engineering-change impact assessment
+
+The day-to-day ILS question on an in-service support contract is: *this engineering change is coming, which ILS products does it touch?* `ec-impact` answers it from a short change description:
+
+```
+$ python -m ilsrag ec-impact examples/ec/ec-demo-001-radar-psu.toml --out report.md
+EC-DEMO-001: 13 affected, 0 to confirm, 4 not affected, 0 basis not found -> report.md
+```
+
+You describe the change as twelve yes / no / unknown characteristics (new part number? form-fit-function change? software? new tools? hazardous material? obsolescence-driven? ...). The rules in [`corpus/ec_rules.toml`](corpus/ec_rules.toml) map them to 17 ILS products across the twelve DND ILS elements of DAOD 3007-0: configuration records, LSA records (FMECA, maintenance task analysis, LORA), RAM predictions and RBDs, the maintenance plan and PM schedule, maintenance-system task data, spares and provisioning, obsolescence, technical data, safety precautions, training, personnel, support and test equipment, software, facilities, PHS&T, materiel assurance, and support-solution V&V.
+
+The report gives, for each product, why it is affected, what to do, and the passage that requires it, cited to the page or section. Two worked reports on fictional changes are in [`examples/ec/reports/`](examples/ec/reports/): [an obsolescence-driven radar power supply replacement](examples/ec/reports/ec-demo-001-radar-psu.md) and [a console software update](examples/ec/reports/ec-demo-002-console-software.md).
+
+Design choices:
+
+- **Unknown is not "no".** A characteristic the change request leaves open puts the products it would affect on a *confirm with the EC team* list, and the report lists every open question with the products whose scope depends on it. In the radar example, whether the new unit's capacitor bank needs special handling is still open, and it bears on materiel assurance, safety precautions and PHS&T.
+- **Citations by exact phrase, not search.** Each rule names a document and a phrase the passage must contain. A planning record has to give the same answer every run, and if a passage disappears (document not downloaded, reworded in a new issue) the report says *basis not found* rather than citing something close. `ec-impact --check-rules` verifies all 24 phrases against the index.
+- **Provenance stays visible.** Where a rule leans on MIL-STD-3034A (USN) or NATO material, the report says that source describes that organization's practice, not RCN policy.
+- **The rules are meant to be edited.** Triggers and actions are the judgement an experienced ILS practitioner owns; the file is plain TOML.
+- Also exposed as the MCP tool `ec_impact`, so Claude can run an assessment from a change described in conversation.
 
 ## Quick start
 
@@ -160,9 +182,10 @@ Next, in order:
 
 1. **Live agent run and `eval --agent`** with an API key: citation verified-rate, cites-expected-document rate, and decline rate on the four unanswerable questions. This also shows whether the agent's issuer filter recovers h02, h04 and h06.
 2. **Held-out questions** written from maintenance-planning experience without looking at the corpus, so the reported numbers aren't measured on the same questions used to choose the setup.
-3. **Engineering-change impact query:** given a described change to a system, list the ILS documents and DAOD requirements it touches (configuration management, materiel assurance, maintenance instructions).
-4. **Split the bilingual PMI spec** into English and French passages.
-5. **Claude Code demo script** using the MCP server, for live walkthroughs.
+3. **LSA worked examples:** small, tested calculations on a fictional item (RAM and RBD availability, Poisson sparing for a patrol, LORA cost comparison, FMECA criticality, MIL-HDBK-217 parts count), linked from the EC report's affected products.
+4. **Add ASD S3000L** (logistic support analysis) and public AJISS tender documents to the corpus.
+5. **Split the bilingual PMI spec** into English and French passages.
+6. **Claude Code demo script** using the MCP server, for live walkthroughs.
 
 ## What the real documents broke
 
@@ -172,6 +195,7 @@ The first run against the real corpus found problems the synthetic tests didn't.
 - **`<p>` nested in `<dd>`, and text in `<div>`s separated by `<br>`,** gave duplicated or missing text. The HTML parser now reads only the innermost text blocks.
 - **Definition terms are short bold paragraphs** ("**available** (disponible)") and fell under the minimum length, which left definitions without their term.
 - **The 2019 Ready Naval Forces evaluation PDF is AES-encrypted** (no password, but `pypdf` needs `cryptography` to open it).
+- **Short list items were dropped.** DAOD 3007-0 lists the twelve ILS elements as `<li>` items like "supply support;", under the length filter meant for page clutter; only five of twelve survived. Found while writing the EC rules, which cite that list.
 - **PDF table rows looked like headings** ("FY 2013/14 FY 2014/15", "90% 75% 100%"), and title-case headings like "Executive Summary" were missed.
 - **Python's `urllib` stalls on canada.ca** at the TLS read while `curl` gets the same page in half a second, so `fetch` uses `curl` first.
 - **NAVSEA's old instruction links now redirect to a different document.** NAVSEAINST 4790.26A, 4790.27B and 4790.30 have been withdrawn; their URLs serve COMNAVAIRFORINST 4790.2E, the 1,930-page Naval Aviation Maintenance Program. Saved under the old name, an aviation manual would have been indexed and cited as NAVSEA ship policy. Caught by reading the first page before ingesting; the three entries are out of the manifest and the file is kept aside in `data/excluded/`. Lesson: check what a download *is*, not just that it's a PDF.
@@ -205,7 +229,10 @@ ilsrag/chunk.py        blocks → chunks
 ilsrag/index.py        BM25, embeddings, hybrid search
 ilsrag/glossary.py     naval/ILS acronym expansion
 ilsrag/agent.py        Claude tool loop, citation verification, extractive fallback
-ilsrag/mcp_server.py   the same tools as a read-only MCP server
+ilsrag/mcp_server.py   the same tools as a read-only MCP server, plus ec_impact
+ilsrag/ec_impact.py    engineering-change impact assessment
+corpus/ec_rules.toml   EC rules: change characteristics -> ILS products, with cited basis
+examples/ec/           fictional example ECs and their generated reports
 ilsrag/evaluate.py     retrieval and end-to-end metrics
 ilsrag/cli.py          command line
 eval/questions*.jsonl  direct, hard (paraphrase / cross-doc / unanswerable) and operational question sets
