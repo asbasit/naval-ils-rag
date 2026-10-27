@@ -189,6 +189,18 @@ def cmd_ec_impact(args):
         print(out)
 
 
+def cmd_lsa(args):
+    from .lsa import workbook
+    result = workbook.run(Path(args.case))
+    report = workbook.render(result)
+    if args.out:
+        Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.out).write_text(report, encoding="utf-8")
+        print(f"LSA workbook for {result.case['case']['id']} -> {args.out}")
+    else:
+        print(report)
+
+
 def cmd_docs(args):
     manifest, raw, _ = _paths(args)
     for meta in load_manifest(manifest).values():
@@ -244,6 +256,11 @@ def main(argv=None):
     s.add_argument("--json", action="store_true", help="JSON instead of Markdown")
     s.add_argument("--check-rules", action="store_true", help="verify every rule's cited passage exists in the corpus")
     s.set_defaults(func=cmd_ec_impact)
+
+    s = sub.add_parser("lsa", help="LSA workbook: RAM/RBD, sparing, LORA, FMECA, parts count")
+    s.add_argument("case", help="case file (TOML), see examples/lsa/")
+    s.add_argument("--out", help="write the report here instead of printing it")
+    s.set_defaults(func=cmd_lsa)
 
     args = p.parse_args(argv)
     args.func(args)

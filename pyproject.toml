@@ -20,7 +20,7 @@ ilsrag = "ilsrag.cli:main"
 ilsrag-mcp = "ilsrag.mcp_server:main"
 
 [tool.setuptools]
-packages = ["ilsrag"]
+packages = ["ilsrag", "ilsrag.lsa"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

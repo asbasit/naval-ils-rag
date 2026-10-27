@@ -1,0 +1,196 @@
+# FICTIONAL EXAMPLE. Equipment, figures and costs are invented to show the
+# method; they are not data for any real ship, system or supplier.
+# Same change as examples/ec/ec-demo-001-radar-psu.toml.
+
+[case]
+id = "LSA-DEMO-001"
+title = "Navigation radar transceiver: power supply replacement"
+linked_ec = "EC-DEMO-001"
+fictional = true
+patrol_days = 90
+operating_hours_per_day = 20
+ships = 6
+
+# Blocks of the radar. "psu" is the item being changed; its MTBF here is the
+# old unit's and is overridden by [change] for the before/after comparison.
+[[block]]
+name = "antenna"
+mtbf = 8000
+mttr = 6
+
+[[block]]
+name = "psu"
+mtbf = 4000
+mttr = 1.5
+
+[[block]]
+name = "modulator"
+mtbf = 6000
+mttr = 3
+
+[[block]]
+name = "receiver"
+mtbf = 9000
+mttr = 2
+
+[[block]]
+name = "processor"
+mtbf = 12000
+mttr = 1
+
+# Two transceiver channels, either can carry the radar (active redundancy),
+# in series with the antenna and the processor.
+[rbd]
+series = [
+  "antenna",
+  { parallel = [
+      { series = ["psu#a", "modulator#a", "receiver#a"] },
+      { series = ["psu#b", "modulator#b", "receiver#b"] },
+  ] },
+  "processor",
+]
+
+[change]
+block = "psu"
+mtbf_before = 4000
+mtbf_after = 9000
+mtbur_before = 3500     # unscheduled removals incl. no-fault-found
+mtbur_after = 8000      # built-in test should cut no-fault-found removals
+
+[ao]
+admin_delay_hours = 4                  # find the spare, paperwork, tag-out
+logistic_delay_hours_no_spare = 504    # 21 days to get one to the ship on patrol
+
+[sparing]
+installed_per_ship = 2
+protection = 0.95
+
+[lora]
+unit_price = 18000
+fleet_hours_per_year = 48000      # 6 ships x 2 units x 4,000 h
+years = 20
+
+[[lora.option]]
+name = "Discard and replace"
+kind = "discard"
+turnaround_days = 120             # replenishment lead time
+transport_cost = 300
+
+[[lora.option]]
+name = "Repair onboard (card swap)"
+kind = "repair"
+turnaround_days = 2
+repair_cost = 2500
+fixed_cost = 240000               # test set + training for 6 ships
+constraints = ["capacitor bank discharge hazard: safe onboard repair not yet confirmed (open question on EC-DEMO-001)",
+               "needs a technician qualified on the new unit in every crew"]
+
+[[lora.option]]
+name = "Repair at fleet maintenance facility"
+kind = "repair"
+turnaround_days = 30
+repair_cost = 3000
+transport_cost = 400
+fixed_cost = 60000                # one test set per coast + training
+
+[[lora.option]]
+name = "Repair at OEM"
+kind = "repair"
+turnaround_days = 90
+repair_cost = 4500
+transport_cost = 1200
+fixed_cost = 0
+constraints = ["export and controlled-goods paperwork for each shipment"]
+
+# Failure modes of the new power supply. alpha = share of the unit's failures,
+# beta = probability the mode causes the stated effect. With two redundant
+# channels, losing one supply degrades the radar rather than losing it.
+[fmeca]
+
+[[fmeca.mode]]
+mode = "No output"
+effect = "One transceiver channel lost; radar continues on the other"
+severity = "III"
+alpha = 0.45
+beta = 1.0
+
+[[fmeca.mode]]
+mode = "Output overvoltage"
+effect = "Damage to modulator; channel lost pending repair"
+severity = "II"
+alpha = 0.15
+beta = 0.5
+
+[[fmeca.mode]]
+mode = "Capacitor venting"
+effect = "Electrolyte release in cabinet; personnel hazard during maintenance"
+severity = "II"
+alpha = 0.15
+beta = 0.1
+
+[[fmeca.mode]]
+mode = "False built-in test alarm"
+effect = "Unnecessary removal (no fault found)"
+severity = "IV"
+alpha = 0.25
+beta = 1.0
+
+# Parts count prediction for the new unit. The lambda_g values below are
+# INVENTED to illustrate the method: they are not taken from MIL-HDBK-217.
+[parts_count]
+item = "psu (new)"
+environment = "naval sheltered (illustrative)"
+
+[[parts_count.part]]
+part_type = "Capacitor, aluminium electrolytic"
+quantity = 12
+lambda_g = 2.0
+source = "illustrative"
+
+[[parts_count.part]]
+part_type = "Capacitor, film"
+quantity = 20
+lambda_g = 0.3
+source = "illustrative"
+
+[[parts_count.part]]
+part_type = "Transistor, power MOSFET"
+quantity = 6
+lambda_g = 3.0
+source = "illustrative"
+
+[[parts_count.part]]
+part_type = "Diode, rectifier"
+quantity = 16
+lambda_g = 0.8
+source = "illustrative"
+
+[[parts_count.part]]
+part_type = "Transformer, power"
+quantity = 2
+lambda_g = 4.0
+source = "illustrative"
+
+[[parts_count.part]]
+part_type = "Microcircuit, controller"
+quantity = 10
+lambda_g = 1.5
+source = "illustrative"
+
+[[parts_count.part]]
+part_type = "Resistor, film"
+quantity = 60
+lambda_g = 0.1
+source = "illustrative"
+
+[[parts_count.part]]
+part_type = "Connector"
+quantity = 4
+lambda_g = 2.0
+source = "illustrative"
+
+[[parts_count.part]]
+part_type = "Fan, cooling"
+quantity = 1
+lambda_g = 13.0
+source = "illustrative"

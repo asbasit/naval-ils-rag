@@ -16,6 +16,7 @@ Built by Abdul Salam Basit, retired naval Commander (submarines) and electrical 
 | Retrieval evaluation (41 questions, 4 setups compared, passage-level check) | Done; results below and in `eval/results/` |
 | MCP server | Done; tested over a real stdio client session |
 | Engineering-change impact assessment (`ec-impact`) | Done; 17 rules, all 24 cited passages verified in the real corpus |
+| LSA workbook (`lsa`): RAM/RBD, sparing, LORA, FMECA, parts count | Done; checked against hand-worked values |
 | Citing agent + citation verification | Built and tested against a scripted client; **live API run pending** |
 | End-to-end agent eval (`eval --agent`) | Built; **pending API run** |
 
@@ -58,6 +59,27 @@ Design choices:
 - **Provenance stays visible.** Where a rule leans on MIL-STD-3034A (USN) or NATO material, the report says that source describes that organization's practice, not RCN policy.
 - **The rules are meant to be edited.** Triggers and actions are the judgement an experienced ILS practitioner owns; the file is plain TOML.
 - Also exposed as the MCP tool `ec_impact`, so Claude can run an assessment from a change described in conversation.
+
+## LSA workbook
+
+The EC report says *which* products to update; the workbook does the numbers for the analytical ones. One case file, one report, before and after the change:
+
+```
+$ python -m ilsrag lsa examples/lsa/radar-psu.toml --out report.md
+```
+
+The [worked example](examples/lsa/reports/radar-psu.md) follows the same fictional radar power-supply replacement as EC-DEMO-001 (new unit, MTBF 4,000 h to 9,000 h, two redundant transceiver channels, 90-day patrol, six ships):
+
+| Analysis | Method (in `ilsrag/lsa/`) | What the example shows |
+|---|---|---|
+| RAM and RBD | Inherent, achieved, operational availability; series, parallel and k-of-n block diagrams | System availability barely moves (99.9166% to 99.9167%) because the supply sits in a redundant channel; patrol reliability without repair rises from 43% to 51% |
+| Operational availability | Ao = MTBM / (MTBM + MDT), with logistic delay | Same supply: 99.94% with a spare onboard, 94.6% if one takes 21 days to arrive |
+| Sparing | Poisson demand over the patrol, smallest stock meeting the protection target | 95% protection needs 3 spares per ship before the change and 2 after |
+| LORA | Life-cycle cost per option: repair or replace events, pipeline stock, fixed support costs | Repair at the fleet maintenance facility is cheapest over 20 years; onboard repair is second and carries an unresolved capacitor-hazard constraint from the EC report |
+| FMECA | MIL-STD-1629A-style criticality, Cm = beta x alpha x lambda x t; criticality matrix | Overvoltage ranks first: lower probability than "no output" but critical severity |
+| Parts count | MIL-HDBK-217 method, sum of N x lambda_g x pi_Q | Predicts 9,025 h against the supplier's 9,000 h |
+
+All figures in the example are invented and labelled so. The parts count module ships no handbook tables; the example's failure rates are marked illustrative, and real use takes lambda_g and pi_Q from MIL-HDBK-217 or an approved source. Each formula is documented at the top of its module and checked in `tests/test_lsa.py` against values worked by hand.
 
 ## Quick start
 
@@ -182,7 +204,7 @@ Next, in order:
 
 1. **Live agent run and `eval --agent`** with an API key: citation verified-rate, cites-expected-document rate, and decline rate on the four unanswerable questions. This also shows whether the agent's issuer filter recovers h02, h04 and h06.
 2. **Held-out questions** written from maintenance-planning experience without looking at the corpus, so the reported numbers aren't measured on the same questions used to choose the setup.
-3. **LSA worked examples:** small, tested calculations on a fictional item (RAM and RBD availability, Poisson sparing for a patrol, LORA cost comparison, FMECA criticality, MIL-HDBK-217 parts count), linked from the EC report's affected products.
+3. **Maintenance task analysis** in the workbook: task times, skills and spares per task, rolled up into man-hours per patrol.
 4. **Add ASD S3000L** (logistic support analysis) and public AJISS tender documents to the corpus.
 5. **Split the bilingual PMI spec** into English and French passages.
 6. **Claude Code demo script** using the MCP server, for live walkthroughs.
@@ -233,6 +255,8 @@ ilsrag/mcp_server.py   the same tools as a read-only MCP server, plus ec_impact
 ilsrag/ec_impact.py    engineering-change impact assessment
 corpus/ec_rules.toml   EC rules: change characteristics -> ILS products, with cited basis
 examples/ec/           fictional example ECs and their generated reports
+ilsrag/lsa/            RAM/RBD, sparing, LORA, FMECA, parts count, and the workbook that runs them
+examples/lsa/          fictional LSA case and its generated report
 ilsrag/evaluate.py     retrieval and end-to-end metrics
 ilsrag/cli.py          command line
 eval/questions*.jsonl  direct, hard (paraphrase / cross-doc / unanswerable) and operational question sets
